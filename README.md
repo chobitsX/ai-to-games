@@ -2,7 +2,7 @@
 
 一个有趣的HTML5 Canvas打字练习游戏，适合儿童和打字初学者。通过击打下落的字母来提高打字速度和准确性。
 
-![游戏截图](https://placeholder-for-screenshot.png)
+![游戏截图](./imags/image1.jpg)
 
 ## 功能特点
 
