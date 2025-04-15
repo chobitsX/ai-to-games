@@ -1,0 +1,181 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a8e6cf, #dcedc1);
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.game-container {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #ff8b94;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.score-container, .time-container {
+    font-size: 24px;
+    color: #ff8b94;
+}
+
+#gameCanvas {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.game-settings {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 20px 0;
+    font-size: 18px;
+    color: #ff8b94;
+}
+
+.case-switch, .time-setting, .difficulty-setting {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px;
+}
+
+/* 难度选择器样式 */
+#difficulty {
+    padding: 8px 12px;
+    border: 2px solid #ff8b94;
+    border-radius: 20px;
+    background-color: white;
+    color: #ff8b94;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+    min-width: 100px;
+}
+
+#difficulty option {
+    background-color: white;
+    color: #ff8b94;
+}
+
+/* 难度颜色标识 */
+#difficulty option[value="easy"] {
+    color: #5cb85c;
+}
+
+#difficulty option[value="normal"] {
+    color: #f0ad4e;
+}
+
+#difficulty option[value="hard"] {
+    color: #d9534f;
+}
+
+/* 开关样式 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #ff8b94;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #ff8b94;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* 下拉选择框样式 */
+select {
+    padding: 8px 12px;
+    border: 2px solid #ff8b94;
+    border-radius: 20px;
+    background-color: white;
+    color: #ff8b94;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+}
+
+select:hover {
+    background-color: #fff5f5;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+button {
+    background-color: #ff8b94;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.1);
+    background-color: #ff6b7b;
+}
+
+button:active {
+    transform: scale(0.95);
+} 
