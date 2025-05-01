@@ -24,6 +24,7 @@ class Game {
         this.remainingTime = this.maxGameTime;
         this.timerInterval = null;
         this.difficulty = 'normal'; // 默认难度为普通
+        this.speedLevel = 5; // 默认速度等级为5（中等）
         
         this.letters = [];
         this.bullets = [];
@@ -79,6 +80,20 @@ class Game {
             }
         };
         
+        // 速度等级倍率对照表 (1-10)
+        this.speedMultipliers = {
+            1: 0.4,  // 极慢
+            2: 0.6,
+            3: 0.8,
+            4: 0.9,
+            5: 1.0,  // 中等（默认）
+            6: 1.2,
+            7: 1.4,
+            8: 1.7,
+            9: 2.0,
+            10: 2.5  // 极快
+        };
+        
         // 难度相关参数 - 这些值会根据选择的难度进行设置
         this.initialLetterSpeed = 0.8;
         this.letterSpeed = this.initialLetterSpeed;
@@ -114,6 +129,8 @@ class Game {
         
         // 应用默认难度设置
         this.applyDifficultySettings('normal');
+        // 应用默认速度等级
+        this.applySpeedLevel(5);
     }
     
     // 根据选择的难度应用设置
@@ -129,19 +146,42 @@ class Game {
         this.speedIncreaseAmount = settings.speedIncreaseAmount;
         
         this.initialSpawnRate = settings.initialSpawnRate;
-        this.letterSpawnRate = this.initialSpawnRate;
+        this.letterSpawnRate = settings.initialSpawnRate;
         this.minSpawnRate = settings.minSpawnRate;
         this.spawnRateDecreaseAmount = settings.spawnRateDecreaseAmount;
         
         this.initialLettersPerSpawn = settings.initialLettersPerSpawn;
-        this.lettersPerSpawn = this.initialLettersPerSpawn;
+        this.lettersPerSpawn = settings.initialLettersPerSpawn;
         this.maxLettersPerSpawn = settings.maxLettersPerSpawn;
         this.maxLettersOnScreen = settings.maxLettersOnScreen;
         
         // 设置字母生成延迟
         this.letterGenerationDelay = settings.letterGenerationDelay;
         
+        // 应用当前速度等级的倍率
+        this.applySpeedLevel(this.speedLevel);
+        
         console.log(`难度设置为: ${difficulty}`);
+    }
+    
+    // 应用速度等级
+    applySpeedLevel(level) {
+        this.speedLevel = parseInt(level, 10);
+        const multiplier = this.speedMultipliers[this.speedLevel];
+        
+        // 应用速度倍率到相关参数
+        this.letterSpeed = this.initialLetterSpeed * multiplier;
+        this.maxLetterSpeed = this.difficultySettings[this.difficulty].maxLetterSpeed * multiplier;
+        
+        // 调整生成间隔 (反比例关系 - 速度越快，生成间隔越短)
+        this.letterSpawnRate = this.initialSpawnRate / multiplier;
+        this.minSpawnRate = this.difficultySettings[this.difficulty].minSpawnRate / multiplier;
+        
+        // 调整飞机和子弹速度
+        this.planeSpeed = 0.4 * (multiplier > 1 ? Math.sqrt(multiplier) : multiplier);
+        this.bulletSpeed = 15 * (multiplier > 1 ? Math.sqrt(multiplier) : multiplier);
+        
+        console.log(`速度等级设置为: ${this.speedLevel}，倍率: ${multiplier.toFixed(1)}`);
     }
     
     preparePlaneImage() {
@@ -201,6 +241,12 @@ class Game {
             this.applyDifficultySettings(difficultySelect.value);
         });
         
+        // 速度等级选择
+        const speedLevelSelect = document.getElementById('speedLevel');
+        speedLevelSelect.addEventListener('change', () => {
+            this.applySpeedLevel(speedLevelSelect.value);
+        });
+        
         // 游戏时长设置
         const gameTimeSelect = document.getElementById('gameTime');
         gameTimeSelect.addEventListener('change', () => {
@@ -251,18 +297,14 @@ class Game {
         // 减少字母生成间隔，但不低于下限
         if (this.letterSpawnRate > this.minSpawnRate) {
             this.letterSpawnRate = Math.max(this.letterSpawnRate - this.spawnRateDecreaseAmount, this.minSpawnRate);
-            console.log(`难度增加: 生成间隔 ${this.letterSpawnRate}ms`);
+            console.log(`难度增加: 生成间隔 ${this.letterSpawnRate.toFixed(0)}ms`);
         }
         
-        // 增加同时生成的字母数量，但不超过上限
+        // 增加每次生成的字母数量，但不超过上限
         if (this.lettersPerSpawn < this.maxLettersPerSpawn) {
-            this.lettersPerSpawn++;
-            console.log(`难度增加: 每次生成字母数量 ${this.lettersPerSpawn}`);
+            this.lettersPerSpawn = Math.min(this.lettersPerSpawn + 0.5, this.maxLettersPerSpawn);
+            console.log(`难度增加: 字母生成数量 ${this.lettersPerSpawn.toFixed(1)}`);
         }
-        
-        // 随着难度增加，逐渐减少字母生成延迟，但不低于200毫秒
-        this.letterGenerationDelay = Math.max(this.letterGenerationDelay - 50, 200);
-        console.log(`难度增加: 字母生成延迟 ${this.letterGenerationDelay}ms`);
     }
     
     endGame() {
@@ -288,9 +330,13 @@ class Game {
         const difficultySelect = document.getElementById('difficulty');
         this.applyDifficultySettings(difficultySelect.value);
         
+        // 获取当前选择的速度等级
+        const speedLevelSelect = document.getElementById('speedLevel');
+        this.applySpeedLevel(speedLevelSelect.value);
+        
         // 重置难度参数为初始值
-        this.letterSpeed = this.initialLetterSpeed;
-        this.letterSpawnRate = this.initialSpawnRate;
+        this.letterSpeed = this.initialLetterSpeed * this.speedMultipliers[this.speedLevel];
+        this.letterSpawnRate = this.initialSpawnRate / this.speedMultipliers[this.speedLevel];
         this.lettersPerSpawn = this.initialLettersPerSpawn;
         
         // 开始计时

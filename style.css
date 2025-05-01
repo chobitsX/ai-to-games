@@ -49,7 +49,7 @@ h1 {
     color: #ff8b94;
 }
 
-.case-switch, .time-setting, .difficulty-setting {
+.case-switch, .time-setting, .difficulty-setting, .speed-setting {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -57,7 +57,7 @@ h1 {
 }
 
 /* 难度选择器样式 */
-#difficulty {
+#difficulty, #speedLevel {
     padding: 8px 12px;
     border: 2px solid #ff8b94;
     border-radius: 20px;
@@ -70,7 +70,7 @@ h1 {
     min-width: 100px;
 }
 
-#difficulty option {
+#difficulty option, #speedLevel option {
     background-color: white;
     color: #ff8b94;
 }
@@ -85,6 +85,26 @@ h1 {
 }
 
 #difficulty option[value="hard"] {
+    color: #d9534f;
+}
+
+/* 速度等级颜色标识 */
+#speedLevel option[value="1"],
+#speedLevel option[value="2"],
+#speedLevel option[value="3"] {
+    color: #5cb85c;
+}
+
+#speedLevel option[value="4"],
+#speedLevel option[value="5"],
+#speedLevel option[value="6"],
+#speedLevel option[value="7"] {
+    color: #f0ad4e;
+}
+
+#speedLevel option[value="8"],
+#speedLevel option[value="9"],
+#speedLevel option[value="10"] {
     color: #d9534f;
 }
 
